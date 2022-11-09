@@ -27,6 +27,19 @@ const Admin: React.FC = () => {
           <div
             className='overflow-hidden rounded-xl border-2 border-gray-500'
             key={id.value}
+            onKeyDown={(e) => {
+              if (e.key === 's' && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault();
+                let message;
+                try {
+                  // eslint-disable-next-line no-eval
+                  message = eval(code.value);
+                } catch (e) {
+                  message = e;
+                }
+                console.info(message);
+              }
+            }}
           >
             <div className='bg-gray-700 p-2 text-white'>
               {name.value || 'No Name'}
