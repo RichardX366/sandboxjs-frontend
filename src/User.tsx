@@ -111,7 +111,8 @@ const User: React.FC = () => {
             })}
             key={i}
           >
-            {typeof elem.message === 'object'
+            {typeof elem.message === 'object' ||
+            typeof elem.message === 'string'
               ? JSON.stringify(elem.message)
               : `${elem.message}${
                   typeof elem.message === 'bigint' ? 'n' : ''
