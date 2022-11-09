@@ -13,39 +13,39 @@ interface ConsoleEntry {
 }
 
 const globalFakeConsole = createState<ConsoleEntry[]>([]);
-// console.log = (...args: any[]) => {
-//   globalFakeConsole.merge(
-//     args.map(
-//       (arg) =>
-//         ({
-//           type: 'log',
-//           message: arg instanceof Error ? arg.stack : arg,
-//         } as ConsoleEntry),
-//     ),
-//   );
-// };
-// console.error = (...args: any[]) => {
-//   globalFakeConsole.merge(
-//     args.map(
-//       (arg) =>
-//         ({
-//           type: 'error',
-//           message: arg instanceof Error ? arg.stack : arg,
-//         } as ConsoleEntry),
-//     ),
-//   );
-// };
-// console.warn = (...args: any[]) => {
-//   globalFakeConsole.merge(
-//     args.map(
-//       (arg) =>
-//         ({
-//           type: 'warn',
-//           message: arg instanceof Error ? arg.stack : arg,
-//         } as ConsoleEntry),
-//     ),
-//   );
-// };
+console.log = (...args: any[]) => {
+  globalFakeConsole.merge(
+    args.map(
+      (arg) =>
+        ({
+          type: 'log',
+          message: arg instanceof Error ? arg.stack : arg,
+        } as ConsoleEntry),
+    ),
+  );
+};
+console.error = (...args: any[]) => {
+  globalFakeConsole.merge(
+    args.map(
+      (arg) =>
+        ({
+          type: 'error',
+          message: arg instanceof Error ? arg.stack : arg,
+        } as ConsoleEntry),
+    ),
+  );
+};
+console.warn = (...args: any[]) => {
+  globalFakeConsole.merge(
+    args.map(
+      (arg) =>
+        ({
+          type: 'warn',
+          message: arg instanceof Error ? arg.stack : arg,
+        } as ConsoleEntry),
+    ),
+  );
+};
 
 const User: React.FC = () => {
   const { height, width } = useViewportSize();
