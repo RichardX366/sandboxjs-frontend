@@ -13,7 +13,6 @@ const Admin: React.FC = () => {
   });
   const [debouncedCurrentlyEditing] = useDebouncedValue(currentlyEditing, 500);
   useEffect(() => {
-    if (debouncedCurrentlyEditing.id === socket.id) return;
     socket.emit('code', {
       code: debouncedCurrentlyEditing.code,
       id: debouncedCurrentlyEditing.id,
