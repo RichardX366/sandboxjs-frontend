@@ -57,19 +57,17 @@ const User: React.FC = () => {
   }, [debouncedCode]);
 
   const runCode = () => {
-    let message;
     try {
       // eslint-disable-next-line no-eval
-      message = eval(code.value);
+      eval(code.value);
     } catch (e) {
-      message = e;
+      fakeConsole.merge([
+        {
+          type: 'error',
+          message: e instanceof Error ? e.stack : e,
+        },
+      ]);
     }
-    fakeConsole.merge([
-      {
-        type: 'log',
-        message: message instanceof Error ? message.stack : message,
-      },
-    ]);
   };
 
   return (
@@ -97,26 +95,35 @@ const User: React.FC = () => {
       >
         {fakeConsole.value.map((elem, i) => (
           <div
-            className={classNames('px-4 py-2 hover:bg-gray-700', {
-              'text-red-500': elem.type === 'error',
-              'text-green-300':
-                typeof elem.message === 'number' ||
-                typeof elem.message === 'bigint',
-              'text-orange-300': elem.type === 'warn',
-              'text-orange-600': typeof elem.message === 'string',
-              'text-blue-600':
-                typeof elem.message === 'boolean' ||
-                elem.message === undefined ||
-                elem.message === null,
-            })}
+            className={classNames(
+              'px-4 py-2 hover:bg-gray-700 whitespace-pre-line',
+              {
+                'text-green-300':
+                  typeof elem.message === 'number' ||
+                  typeof elem.message === 'bigint',
+                'text-orange-400':
+                  elem.type === 'log' && typeof elem.message === 'string',
+                'text-blue-600':
+                  typeof elem.message === 'boolean' ||
+                  elem.message === undefined ||
+                  elem.message === null,
+                'text-red-500': elem.type === 'error',
+                'text-yellow-400': elem.type === 'warn',
+              },
+            )}
             key={i}
           >
-            {typeof elem.message === 'object' ||
-            typeof elem.message === 'string'
+            {((typeof elem.message === 'object' ||
+              typeof elem.message === 'string') &&
+            elem.type === 'log'
               ? JSON.stringify(elem.message)
-              : `${elem.message}${
-                  typeof elem.message === 'bigint' ? 'n' : ''
-                }`.replaceAll(' ', '\u00A0')}
+              : `${elem.message}${typeof elem.message === 'bigint' ? 'n' : ''}`
+            )
+              .split('\n    at runCode')[0]
+              .replace(/(?=eval \(eval at runCode \()(.*)(?=<anonymous>)/s, '')
+              .replace('<anonymous>:', '')
+              .replace(')', '')
+              .replaceAll(' ', '\u00A0')}
           </div>
         ))}
         <div
