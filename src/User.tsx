@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 import { useDebouncedValue, useViewportSize } from '@mantine/hooks';
 import { globalCode } from './state';
@@ -52,6 +52,7 @@ const User: React.FC = () => {
   const fakeConsole = useHookstate(globalFakeConsole);
   const code = useHookstate(globalCode);
   const [debouncedCode] = useDebouncedValue(code.value, 500);
+  const consoleDiv = useRef<HTMLDivElement>(null);
   useEffect(() => {
     socket.emit('code', { code: debouncedCode, id: socket.id });
   }, [debouncedCode]);
@@ -68,6 +69,11 @@ const User: React.FC = () => {
         },
       ]);
     }
+    setTimeout(() =>
+      consoleDiv.current?.scroll({
+        top: consoleDiv.current?.scrollHeight,
+      }),
+    );
   };
 
   return (
@@ -92,6 +98,7 @@ const User: React.FC = () => {
       <div
         style={{ maxHeight: height - 64 }}
         className='text-white font-mono pb-12 divide-y divide-gray-200 overflow-auto'
+        ref={consoleDiv}
       >
         {fakeConsole.value.map((elem, i) => (
           <div
