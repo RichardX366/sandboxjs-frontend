@@ -56,6 +56,11 @@ const User: React.FC = () => {
   useEffect(() => {
     socket.emit('code', { code: debouncedCode, id: socket.id });
   }, [debouncedCode]);
+  useEffect(() => {
+    consoleDiv.current?.scroll({
+      top: consoleDiv.current?.scrollHeight,
+    });
+  }, [fakeConsole.value]);
 
   const runCode = () => {
     try {
@@ -69,11 +74,6 @@ const User: React.FC = () => {
         },
       ]);
     }
-    setTimeout(() =>
-      consoleDiv.current?.scroll({
-        top: consoleDiv.current?.scrollHeight,
-      }),
-    );
   };
 
   return (
@@ -96,8 +96,8 @@ const User: React.FC = () => {
         />
       </div>
       <div
-        style={{ maxHeight: height - 64 }}
-        className='text-white font-mono pb-12 divide-y divide-gray-200 overflow-auto'
+        style={{ maxHeight: height - 112 }}
+        className='text-white font-mono divide-y divide-gray-200 overflow-auto'
         ref={consoleDiv}
       >
         {fakeConsole.value.map((elem, i) => (
