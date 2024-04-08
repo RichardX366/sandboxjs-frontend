@@ -2,7 +2,7 @@ import { io } from 'socket.io-client';
 import { globalCode, globalIsAdmin, globalName, globalUsers } from './state';
 
 export const socket = io(
-  process.env.REACT_APP_API_URL || 'https://sandboxjs.richardx.win',
+  process.env.REACT_APP_API_URL || 'https://sandboxjs.richardxiong.com',
   { auth: { name: globalName.value, code: globalCode.value } },
 );
 
